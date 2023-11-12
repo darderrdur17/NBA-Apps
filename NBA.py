@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import base64
+import numpy as np
+import seaborn as sns
 import plotly.express as px
 
 st.title('National Basketball Association[NBA] Player Stats Explorer')
@@ -8,7 +10,7 @@ st.title('National Basketball Association[NBA] Player Stats Explorer')
 st.sidebar.header('User Input Features')
 selected_year = st.sidebar.selectbox('Year:', list(reversed(range(1950, 2022))))
 
-@st.cache
+@st.cache_data(allow_output_mutation=True)
 def load_data(year):
     url = f"https://www.basketball-reference.com/leagues/NBA_{year}_per_game.html"
     html = pd.read_html(url, header=0)
@@ -42,7 +44,10 @@ st.markdown(file_download(df_selected_team), unsafe_allow_html=True)
 
 if st.button('Intercorrelation Heatmap'):
     st.header('Intercorrelation Matrix Heatmap')
-    corr = df_selected_team.corr()
+    # Exclude non-numeric columns before calculating correlation
+    numeric_cols = df_selected_team.select_dtypes(include='number')
+    corr = numeric_cols.corr()
     fig = px.imshow(corr, x=corr.index, y=corr.columns, color_continuous_scale='Viridis', labels=dict(color='Correlation'))
     fig.update_layout(title_text='Intercorrelation Matrix Heatmap')
     st.plotly_chart(fig)
+
