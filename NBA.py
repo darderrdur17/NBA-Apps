@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
 import base64
+import plotly
 import plotly.express as px
+
 
 st.title('National Basketball Association[NBA] Player Stats Explorer')
 
