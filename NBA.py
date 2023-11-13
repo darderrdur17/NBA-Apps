@@ -54,12 +54,17 @@ if playerstats is not None:
 
         if st.button('Generate Intercorrelation Heatmap'):
             st.header('Intercorrelation Matrix Heatmap')
+
+        # Exclude non-numeric columns before calculating correlation
             numeric_cols = df_selected_team.select_dtypes(include='number')
-            corr = numeric_cols.corr()
-            fig = px.imshow(corr, x=corr.index, y=corr.columns, color_continuous_scale='Viridis', labels=dict(color='Correlation'))
-            fig.update_layout(title_text='Intercorrelation Matrix Heatmap', width=800, height=600)
-            st.plotly_chart(fig)
-    else:
-        st.warning("No data to display based on the selected filters.")
+
+            if not numeric_cols.empty:
+                corr = numeric_cols.corr()
+                fig = px.imshow(corr, x=corr.index, y=corr.columns, color_continuous_scale='Viridis', labels=dict(color='Correlation'))
+                fig.update_layout(title_text='Intercorrelation Matrix Heatmap', width=800, height=600)
+                st.plotly_chart(fig)
+            else:
+                st.warning("No numeric columns to generate the heatmap.")
 else:
-    st.warning("No data loaded. Please check your internet connection or selected year.")
+    st.warning("No data to display based on the selected filters.")
+
