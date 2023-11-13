@@ -20,17 +20,13 @@ selected_year = st.sidebar.selectbox('Select Year:', list(reversed(range(1950, 2
 
 @st.cache(allow_output_mutation=True)
 def load_data(year):
-    try:
-        url = f"https://www.basketball-reference.com/leagues/NBA_{year}_per_game.html"
-        html = pd.read_html(url, header=0)
-        df = html[0]
-        raw = df.drop(df[df.Age == 'Age'].index)
-        raw = raw.fillna(0)
-        playerstats = raw.drop(['Rk'], axis=1)
-        return playerstats
-    except Exception as e:
-        st.error(f"An error occurred while loading data: {e}")
-        return None
+    url = f"https://www.basketball-reference.com/leagues/NBA_{year}_per_game.html"
+    html = pd.read_html(url, header=0)
+    df = html[0]
+    raw = df.drop(df[df.Age == 'Age'].index)
+    raw = raw.fillna(0)
+    playerstats = raw.drop(['Rk'], axis=1)
+    return playerstats
 
 playerstats = load_data(selected_year)
 
