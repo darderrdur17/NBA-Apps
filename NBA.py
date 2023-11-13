@@ -18,7 +18,7 @@ st.write(
 st.sidebar.header('User Input Features')
 selected_year = st.sidebar.selectbox('Select Year:', list(reversed(range(1950, 2022))))
 
-@st.cache_data(allow_output_mutation=True)
+@st.cache(allow_output_mutation=True)
 def load_data(year):
     try:
         url = f"https://www.basketball-reference.com/leagues/NBA_{year}_per_game.html"
@@ -67,4 +67,3 @@ if playerstats is not None:
         st.warning("No data to display based on the selected filters.")
 else:
     st.warning("No data loaded. Please check your internet connection or selected year.")
-
